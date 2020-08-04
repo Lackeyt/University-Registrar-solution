@@ -1,0 +1,38 @@
+@{
+  Layout = "_Layout";
+}
+
+@model UniversityReg.Models.Student
+
+<h2>Student Details</h2>
+<hr />
+<h3>Name: @Html.DisplayFor(model => model.Name)</h3>
+<h3>Enrollment Date: @Html.ValueFor(model => model.EnrollmentDate, "{0:MM/dd/yyyy}")</h3>
+<h3>Major: </h3>
+
+
+@if(@Model.Courses.Count == 0)
+{
+  <p>This student does not belong to any courses</p>
+}
+else
+{
+  <h4>Courses the student belongs to:</h4>
+  <ul>
+  @foreach(var join in Model.Courses)
+  {
+    <li>@join.Course.Name</li>
+    @using (Html.BeginForm("DeleteCourse", "Students"))
+    {
+      @Html.Hidden("joinId", @join.CourseStudentId)
+      <input type="submit" value="Delete"/>
+    }
+  }
+  </ul>
+}
+
+<input type="button" value="Return Home" onclick="location.href='@Url.Action("Index", "Home")';" class="btn btn-primary" />
+<input type="button" value="Edit Student" onclick="location.href='@Url.Action("Edit", "Students", new { id = Model.StudentId })';" class="btn btn-primary" />
+<input type="button" value="Delete Student" onclick="location.href='@Url.Action("Delete", "Students", new { id = Model.StudentId })';" class="btn btn-primary" />
+<input type="button" value="Add a Course" onclick="location.href='@Url.Action("AddCourse", "Students", new { id = Model.StudentId })';" class="btn btn-primary" />
+<input type="button" value="Back to list" onclick="location.href='@Url.Action("Index", "Students")';" class="btn btn-primary" />
